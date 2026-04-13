@@ -77,13 +77,12 @@ class AuthRepository {
       throw Exception('密码不一致');
     }
 
-    await _api.register(
+    final response = await _api.register(
       normalizedUsername,
       normalizedPassword,
       normalizedConfirmPassword,
     );
 
-    final response = await _api.login(normalizedUsername, normalizedPassword);
     return _persistSession(response);
   }
 

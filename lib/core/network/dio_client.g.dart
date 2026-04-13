@@ -23,7 +23,7 @@ final secureStorageProvider = Provider<FlutterSecureStorage>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SecureStorageRef = ProviderRef<FlutterSecureStorage>;
-String _$dioClientHash() => r'9e7048b39a03b59b0fdaa7bbc605b4ff50b545d5';
+String _$dioClientHash() => r'ef3fce6ea157d86ccc51e1342d0b2315cbd1b51d';
 
 /// See also [dioClient].
 @ProviderFor(dioClient)
