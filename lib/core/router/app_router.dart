@@ -9,6 +9,7 @@ import 'package:flutter_wanandroid/features/detail/presentation/detail_screen.da
 import 'package:flutter_wanandroid/features/main/presentation/main_screen.dart';
 import 'package:flutter_wanandroid/features/search/presentation/search_result_screen.dart';
 import 'package:flutter_wanandroid/features/search/presentation/search_screen.dart';
+import 'package:flutter_wanandroid/features/startup/presentation/startup_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,14 +31,19 @@ GoRouter appRouter(Ref ref) {
   );
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/startup',
     refreshListenable: refreshNotifier,
     redirect: (context, state) {
       final authState = ref.read(authNotifierProvider);
+      final isStartupRoute = state.matchedLocation == '/startup';
       final isAuthRoute = switch (state.matchedLocation) {
         '/login' || '/register' => true,
         _ => false,
       };
+
+      if (isStartupRoute) {
+        return null;
+      }
 
       if (authState.isBusy) {
         return null;
@@ -54,6 +60,10 @@ GoRouter appRouter(Ref ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/startup',
+        builder: (context, state) => const StartupScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_wanandroid/features/auth/presentation/auth_notifier.dart';
-import 'package:flutter_wanandroid/features/auth/presentation/auth_state.dart';
 import 'package:flutter_wanandroid/features/home/presentation/home_screen.dart';
+import 'package:flutter_wanandroid/features/profile/presentation/profile_screen.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -31,14 +30,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       label: '我的',
       icon: Icons.person_outline,
       selectedIcon: Icons.person,
-      body: _ProfileScreen(),
+      body: ProfileScreen(),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     final currentTab = _tabs[_selectedIndex];
-    final showAppBar = _selectedIndex != 0;
+    final showAppBar = _selectedIndex == 1;
 
     return Scaffold(
       appBar: showAppBar ? AppBar(title: Text(currentTab.label)) : null,
@@ -111,85 +110,6 @@ class _BookshelfScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ProfileScreen extends ConsumerWidget {
-  const _ProfileScreen();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authNotifierProvider);
-    final user = authState.user;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: colorScheme.primaryContainer,
-                  child: Icon(
-                    Icons.person,
-                    color: colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user?.nickname ?? '未登录',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        user?.email ?? '请先登录以同步个人信息',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Column(
-            children: const [
-              ListTile(
-                leading: Icon(Icons.code_outlined),
-                title: Text('当前架构'),
-                subtitle: Text('Riverpod + GoRouter + Dio + Freezed'),
-              ),
-              Divider(height: 1),
-              ListTile(
-                leading: Icon(Icons.layers_outlined),
-                title: Text('模块组织'),
-                subtitle: Text('core + features，按 data/domain/presentation 分层'),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        FilledButton.tonalIcon(
-          onPressed: () {
-            ref.read(authNotifierProvider.notifier).logout();
-          },
-          icon: const Icon(Icons.logout),
-          label: const Text('退出登录'),
-        ),
-      ],
     );
   }
 }
