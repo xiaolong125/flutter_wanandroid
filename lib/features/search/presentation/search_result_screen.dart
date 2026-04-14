@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wanandroid/core/router/app_routes.dart';
 import 'package:flutter_wanandroid/features/detail/domain/model/web_page.dart';
 import 'package:flutter_wanandroid/features/home/domain/model/article.dart';
 import 'package:flutter_wanandroid/features/search/presentation/search_result_notifier.dart';
@@ -101,7 +102,7 @@ class _SearchArticleCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           onTap: () {
             context.push(
-              '/detail',
+              AppRoutes.detail,
               extra: WebPage(
                 id: article.id,
                 title: _plainText(article.title),

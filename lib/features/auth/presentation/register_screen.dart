@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wanandroid/core/router/app_routes.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_notifier.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_state.dart';
 import 'package:go_router/go_router.dart';
@@ -253,7 +254,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 if (context.canPop()) {
                                   context.pop();
                                 } else {
-                                  context.go('/login');
+                                  context.go(AppRoutes.login);
                                 }
                               },
                         style: TextButton.styleFrom(

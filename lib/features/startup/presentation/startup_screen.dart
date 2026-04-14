@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wanandroid/core/router/app_routes.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_notifier.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_state.dart';
 import 'package:flutter_wanandroid/features/startup/data/repository/startup_repository.dart';
@@ -109,7 +110,7 @@ class _StartupScreenState extends ConsumerState<StartupScreen> {
     }
 
     _hasNavigated = true;
-    context.go(authState.isAuthenticated ? '/' : '/login');
+    context.go(AppRoutes.home);
   }
 
   void _onEnterPressed() {

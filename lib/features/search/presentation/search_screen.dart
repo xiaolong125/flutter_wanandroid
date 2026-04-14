@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wanandroid/core/router/app_routes.dart';
 import 'package:flutter_wanandroid/features/search/domain/model/search_hot_item.dart';
 import 'package:flutter_wanandroid/features/search/presentation/search_notifier.dart';
 import 'package:flutter_wanandroid/features/search/presentation/search_state.dart';
@@ -44,8 +45,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       return;
     }
 
-    final encodedKeyword = Uri.encodeQueryComponent(query);
-    context.push('/search/result?keyword=$encodedKeyword');
+    context.push(AppRoutes.searchResultLocation(query));
   }
 
   Future<void> _confirmClearHistory() async {

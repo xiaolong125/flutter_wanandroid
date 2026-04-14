@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wanandroid/core/router/app_routes.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_notifier.dart';
 import 'package:flutter_wanandroid/features/auth/presentation/auth_state.dart';
 import 'package:flutter_wanandroid/features/detail/domain/model/web_page.dart';
@@ -39,7 +40,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   void _handleProtectedAction({required VoidCallback onAuthenticated}) {
     final authState = ref.read(authNotifierProvider);
     if (!authState.isAuthenticated) {
-      context.push('/login');
+      context.push(AppRoutes.login);
       return;
     }
     onAuthenticated();
@@ -47,7 +48,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _openWanAndroidSite() async {
     await context.push(
-      '/detail',
+      AppRoutes.detail,
       extra: const WebPage(url: _wanAndroidUrl, title: '玩Android网站'),
     );
   }
@@ -90,7 +91,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   if (authState.isAuthenticated) {
                     await ref.read(authNotifierProvider.notifier).logout();
                   } else if (mounted) {
-                    this.context.push('/login');
+                    this.context.push(AppRoutes.login);
                   }
                 },
               ),
@@ -157,7 +158,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               topInset: MediaQuery.paddingOf(context).top,
               onHeaderTap: () {
                 if (!authState.isAuthenticated) {
-                  context.push('/login');
+                  context.push(AppRoutes.login);
                 }
               },
               onIntegralTap: () => _handleProtectedAction(

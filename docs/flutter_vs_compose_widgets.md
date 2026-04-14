@@ -18,6 +18,8 @@
 10. [主题与样式](#10-主题与样式)
 11. [状态管理对比](#11-状态管理对比)
 12. [代码示例对比](#12-代码示例对比)
+13. [常用布局与组件速查表](#13-常用布局与组件速查表)
+14. [Compose Modifier → Flutter 写法对照表](#14-compose-modifier--flutter-写法对照表)
 
 ---
 
@@ -625,3 +627,169 @@ fun HomeScreen(
 | 性能 | Skia/Impeller 自绘，一致性强 | 与平台组件集成更好，无需自绘 |
 | 学习曲线 | Dart + Widget 体系需适应 | Kotlin + Composable 与现有 Android 知识衔接好 |
 | 控件命名 | 与 Compose 高度相似（均来自 Material Design） | 同上 |
+
+---
+
+## 13. 常用布局与组件速查表
+
+> 前文偏详细说明；本节整理成速查版，适合从 Compose 切到 Flutter 时快速对照。
+
+### 13.1 常用布局
+
+| Compose | Flutter | 说明 |
+|---------|---------|------|
+| `Column` | `Column` | 垂直布局 |
+| `Row` | `Row` | 水平布局 |
+| `Box` | `Stack` / `Container` | 叠放或通用容器 |
+| `Spacer()` | `Spacer()` / `SizedBox()` | 占位与间距 |
+| `Modifier.weight(1f)` | `Expanded(flex: 1)` / `Flexible` | 按比例分配剩余空间 |
+| `fillMaxSize()` | `SizedBox.expand()` | 宽高同时铺满 |
+| `fillMaxWidth()` | `SizedBox(width: double.infinity)` / `Container(width: double.infinity)` | 宽度铺满 |
+| `fillMaxHeight()` | `SizedBox(height: double.infinity)` / `Container(height: double.infinity)` | 高度铺满 |
+| `wrapContentSize()` | 默认尺寸行为 | 按内容包裹 |
+| `LazyColumn` | `ListView.builder` | 懒加载纵向列表 |
+| `LazyRow` | `ListView(scrollDirection: Axis.horizontal)` | 懒加载横向列表 |
+| `LazyVerticalGrid` | `GridView.builder` / `GridView.count` | 网格布局 |
+| `Box(contentAlignment = Alignment.Center)` | `Center` / `Stack(alignment: Alignment.center)` | 内容居中 |
+| `Arrangement.spacedBy(8.dp)` | 子项间插入 `SizedBox(height: 8)` / `SizedBox(width: 8)` | 固定间距 |
+| `FlowRow` / `FlowColumn` | `Wrap` | 自动换行布局 |
+
+### 13.2 常用布局包装组件
+
+| Compose 思路 | Flutter 常用写法 | 说明 |
+|-------------|------------------|------|
+| `padding(...)` | `Padding` | 内边距优先单独包一层 |
+| `align(...)` | `Align` / `Center` | 对齐优先单独包一层 |
+| `size(...)` | `SizedBox` | 固定宽高 |
+| `background(...)` | `ColoredBox` / `Container(color: ...)` | 纯背景色 |
+| `clip(...)` | `ClipRRect` / `ClipOval` | 裁切形状 |
+| `border(...)` | `Container(decoration: BoxDecoration(border: ...))` | 边框 |
+| `clickable {}` | `InkWell` / `GestureDetector` | 点击事件 |
+| `alpha(...)` | `Opacity` | 透明度 |
+| `aspectRatio(...)` | `AspectRatio` | 固定比例 |
+
+### 13.3 常用组件
+
+| Compose | Flutter | 说明 |
+|---------|---------|------|
+| `Text` | `Text` | 文本 |
+| `Image(painterResource(...))` | `Image.asset(...)` | 本地图片 |
+| `AsyncImage(...)` / `Image(...)` | `Image.network(...)` / `CachedNetworkImage` | 网络图片 |
+| `Icon` | `Icon` | 图标 |
+| `Button` | `FilledButton` / `ElevatedButton` | Material 3 主按钮 |
+| `OutlinedButton` | `OutlinedButton` | 描边按钮 |
+| `TextButton` | `TextButton` | 文字按钮 |
+| `TextField` / `OutlinedTextField` | `TextField` / `TextFormField` | 输入框 |
+| `Checkbox` | `Checkbox` | 复选框 |
+| `RadioButton` | `Radio` | 单选框 |
+| `Switch` | `Switch` | 开关 |
+| `Card` | `Card` | 卡片 |
+| `Divider` | `Divider` | 分隔线 |
+| `CircularProgressIndicator` | `CircularProgressIndicator` | 圆形加载 |
+| `LinearProgressIndicator` | `LinearProgressIndicator` | 线形加载 |
+| `Scaffold` | `Scaffold` | 页面骨架 |
+| `Snackbar` | `ScaffoldMessenger.of(context).showSnackBar(...)` | 底部提示 |
+| `AlertDialog` | `showDialog(...) + AlertDialog(...)` | 弹窗 |
+| `ModalBottomSheet` | `showModalBottomSheet(...)` | 底部弹层 |
+
+### 13.4 状态与导航速查
+
+| Compose | Flutter | 说明 |
+|---------|---------|------|
+| `remember {}` | `StatefulWidget` 中的状态字段 | 保存页面内状态 |
+| `mutableStateOf()` | `setState` | 最基础本地状态更新 |
+| `LaunchedEffect` | `initState()` / `WidgetsBinding.instance.addPostFrameCallback` | 初始化副作用 |
+| `DisposableEffect` | `dispose()` | 资源释放 |
+| `collectAsState()` | `StreamBuilder` / `ValueListenableBuilder` / `ref.watch(...)` | 订阅状态 |
+| `NavController.navigate()` | `Navigator.push(...)` / `context.push(...)` | 页面跳转 |
+| `popBackStack()` | `Navigator.pop(...)` / `context.pop()` | 返回上一页 |
+
+### 13.5 常见代码片段
+
+**Compose：**
+```kotlin
+Row {
+    A(Modifier.weight(1f))
+    B(Modifier.weight(1f))
+}
+```
+
+**Flutter：**
+```dart
+Row(
+  children: [
+    Expanded(child: A()),
+    Expanded(child: B()),
+  ],
+)
+```
+
+**Compose：**
+```kotlin
+Modifier
+    .fillMaxWidth()
+    .padding(16.dp)
+```
+
+**Flutter：**
+```dart
+Padding(
+  padding: const EdgeInsets.all(16),
+  child: SizedBox(
+    width: double.infinity,
+    child: YourWidget(),
+  ),
+)
+```
+
+---
+
+## 14. Compose Modifier → Flutter 写法对照表
+
+> Compose 常把布局、样式、交互串在一条 `Modifier` 链里；Flutter 更常见的写法是通过外层 Widget 一层层包裹。
+
+| Compose Modifier | Flutter 常用写法 | 说明 |
+|------------------|------------------|------|
+| `Modifier.padding(16.dp)` | `Padding(padding: EdgeInsets.all(16))` | 内边距 |
+| `Modifier.padding(horizontal = 16.dp)` | `Padding(padding: EdgeInsets.symmetric(horizontal: 16))` | 对称内边距 |
+| `Modifier.size(48.dp)` | `SizedBox(width: 48, height: 48)` | 固定宽高 |
+| `Modifier.width(120.dp)` | `SizedBox(width: 120)` | 固定宽度 |
+| `Modifier.height(56.dp)` | `SizedBox(height: 56)` | 固定高度 |
+| `Modifier.fillMaxSize()` | `SizedBox.expand()` | 铺满父容器 |
+| `Modifier.fillMaxWidth()` | `SizedBox(width: double.infinity)` | 铺满可用宽度 |
+| `Modifier.fillMaxHeight()` | `SizedBox(height: double.infinity)` | 铺满可用高度 |
+| `Modifier.weight(1f)` | `Expanded(flex: 1)` | 按比例占剩余空间 |
+| `Modifier.background(Color.Red)` | `ColoredBox(color: Colors.red)` / `Container(color: Colors.red)` | 背景色 |
+| `Modifier.background(color, shape = RoundedCornerShape(12.dp))` | `Container(decoration: BoxDecoration(color: ..., borderRadius: ...))` | 带圆角背景 |
+| `Modifier.border(1.dp, Color.Gray)` | `Container(decoration: BoxDecoration(border: Border.all(...)))` | 边框 |
+| `Modifier.clip(RoundedCornerShape(12.dp))` | `ClipRRect(borderRadius: BorderRadius.circular(12))` | 圆角裁切 |
+| `Modifier.clip(CircleShape)` | `ClipOval(...)` / `CircleAvatar` | 圆形裁切 |
+| `Modifier.clickable { ... }` | `InkWell(onTap: ...)` / `GestureDetector(onTap: ...)` | 点击事件 |
+| `Modifier.alpha(0.5f)` | `Opacity(opacity: 0.5)` | 透明度 |
+| `Modifier.align(Alignment.Center)` | `Align(alignment: Alignment.center)` / `Center` | 子组件对齐 |
+| `Modifier.offset(x = 8.dp, y = 4.dp)` | `Transform.translate(offset: Offset(8, 4))` | 位移 |
+| `Modifier.rotate(45f)` | `Transform.rotate(angle: math.pi / 4)` | 旋转 |
+| `Modifier.scale(1.2f)` | `Transform.scale(scale: 1.2)` | 缩放 |
+| `Modifier.aspectRatio(16f / 9f)` | `AspectRatio(aspectRatio: 16 / 9)` | 宽高比 |
+| `Modifier.shadow(4.dp, RoundedCornerShape(12.dp))` | `Material(elevation: 4, borderRadius: ...)` / `Container(decoration: BoxDecoration(boxShadow: ...))` | 阴影 |
+| `Modifier.verticalScroll(rememberScrollState())` | `SingleChildScrollView` | 普通滚动容器 |
+| `Modifier.horizontalScroll(rememberScrollState())` | `SingleChildScrollView(scrollDirection: Axis.horizontal)` | 横向滚动 |
+| `Modifier.safeDrawingPadding()` | `SafeArea` | 安全区域 |
+| `Modifier.wrapContentSize(Alignment.Center)` | `Align(alignment: Alignment.center)` | 按内容包裹并对齐 |
+
+### Modifier 使用习惯对照
+
+| Compose 写法习惯 | Flutter 思路 |
+|------------------|-------------|
+| 一个组件后面接一串 `Modifier` | 外层连续包多个 Widget |
+| 样式、布局、交互常写在同一处 | 布局、装饰、点击通常拆给不同 Widget |
+| `Modifier` 顺序会影响最终效果 | Flutter 包裹顺序同样会影响效果 |
+
+### 记忆法
+
+- 要间距：先想 `SizedBox`
+- 要内边距：先想 `Padding`
+- 要对齐：先想 `Align` / `Center`
+- 要平分：先想 `Expanded`
+- 要叠层：先想 `Stack`
+- 要列表：先想 `ListView.builder`
